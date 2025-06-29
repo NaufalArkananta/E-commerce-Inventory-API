@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class ProductController extends Controller
 {
@@ -19,20 +21,33 @@ class ProductController extends Controller
         ]);
 
         $product = Product::create($validated);
-        return response()->json($product, 201);
+        
+        return response()->json([
+            'status' => " 201 OK",
+            'message' => 'Product created successfully',
+            'data' => $product
+        ], 201);
     }
 
     // 2. GET /products
     public function index()
     {
-        return response()->json(Product::with('category')->get());
+        return response()->json([
+            'status' => "200 OK",
+            'message' => 'Product retrieved successfully',
+            'data' => Product::with('category')->get()
+        ], 200);
     }
 
     // 3. GET /products/{id}
     public function show($id)
     {
         $product = Product::with('category')->findOrFail($id);
-        return response()->json($product);
+        return response()->json([
+            'status' => " 200 OK",
+            'message' => 'Product retrieved successfully',
+            'data' => $product
+        ], 200);
     }
 
     // 4. PUT /products/{id}
@@ -48,7 +63,11 @@ class ProductController extends Controller
         ]);
 
         $product->update($validated);
-        return response()->json($product);
+        return response()->json([
+            'status' => " 200 OK",
+            'message' => 'Product updated successfully',
+            'data' => $product
+        ], 200);
     }
 
     // 5. DELETE /products/{id}
@@ -57,7 +76,11 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return response()->json(['message' => 'Product deleted successfully']);
+        return response()->json([
+            'status' => " 200 OK",
+            'message' => 'Product deleted successfully',
+            'data' => $product
+        ], 200);
     }
 
     // 8. GET /products/search
@@ -73,7 +96,11 @@ class ProductController extends Controller
             $query->where('category_id', $request->category_id);
         }
 
-        return response()->json($query->get());
+        return response()->json([
+            'status' => " 200 OK",
+            'message' => 'Product retrieved successfully',
+            'data' => $query->get()
+        ], 200);
     }
 
     // 9. POST /products/update-stock
@@ -88,6 +115,24 @@ class ProductController extends Controller
         $product->stock_quantity += $validated['quantity']; // bisa positif/negatif
         $product->save();
 
-        return response()->json($product);
+        return response()->json([
+            'status' => " 200 OK",
+            'message' => 'Product updated successfully',
+            'data' => $product
+        ], 200);
+    }
+
+    // 10. GET /inventory/value
+    public function inventoryValue()
+    {
+        $total = Product::sum(DB::raw('price * stock_quantity'));
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Total inventory value retrieved successfully',
+            'data' => [
+                'total_value' => $total
+            ]
+        ]);
     }
 }

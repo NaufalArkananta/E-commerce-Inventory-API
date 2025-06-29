@@ -16,12 +16,20 @@ class CategoryController extends Controller
         ]);
 
         $category = Category::create($validated);
-        return response()->json($category, 201);
+        return response()->json([
+            'status' => " 201 OK",
+            'message' => 'Category created successfully',
+            'data' => $category
+        ], 201);
     }
 
     // 7. GET /categories
     public function index()
     {
-        return response()->json(Category::all());
+        return response()->json([
+            'status' => " 200 OK",
+            'message' => 'Category retrieved successfully',
+            'data' => Category::all()
+        ], 200);
     }
 }
