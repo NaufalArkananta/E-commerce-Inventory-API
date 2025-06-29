@@ -27,6 +27,7 @@ class StoreProductRequest extends FormRequest
             'name.required' => 'Nama produk wajib diisi.',
             'price.min' => 'Harga tidak boleh negatif.',
             'stock_quantity.min' => 'Stok tidak boleh negatif.',
+            'category_id.exists' => 'Kategori tidak ditemukan.',
         ];
     }
 }
