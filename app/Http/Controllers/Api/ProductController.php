@@ -6,21 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\UpdateStockRequest;
 
 class ProductController extends Controller
 {
     // 1. POST /products
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'stock_quantity' => 'required|integer|min:0',
-            'category_id' => 'required|exists:categories,id',
-        ]);
-
-        $product = Product::create($validated);
+        $product = Product::create($request->validated());
         
         return response()->json([
             'status' => " 201 OK",
@@ -51,18 +46,11 @@ class ProductController extends Controller
     }
 
     // 4. PUT /products/{id}
-    public function update(Request $request, $id)
+    public function update(UpdateProductRequest $request, $id)
     {
         $product = Product::findOrFail($id);
-
-        $validated = $request->validate([
-            'name' => 'sometimes|string',
-            'price' => 'sometimes|numeric|min:0',
-            'stock_quantity' => 'sometimes|integer|min:0',
-            'category_id' => 'sometimes|exists:categories,id',
-        ]);
-
-        $product->update($validated);
+        $product->update($request->validated());
+        
         return response()->json([
             'status' => " 200 OK",
             'message' => 'Product updated successfully',
@@ -104,15 +92,10 @@ class ProductController extends Controller
     }
 
     // 9. POST /products/update-stock
-    public function updateStock(Request $request)
+    public function updateStock(UpdateStockRequest $request)
     {
-        $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer',
-        ]);
-
-        $product = Product::findOrFail($validated['product_id']);
-        $product->stock_quantity += $validated['quantity']; // bisa positif/negatif
+        $product = Product::findOrFail($request->product_id);
+        $product->stock_quantity += $request->quantity;
         $product->save();
 
         return response()->json([

@@ -4,18 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreCategoryRequest;
 
 class CategoryController extends Controller
 {
     // 6. POST /categories
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string'
-        ]);
-
-        $category = Category::create($validated);
+        $category = Category::create($request->validated());
         return response()->json([
             'status' => " 201 OK",
             'message' => 'Category created successfully',

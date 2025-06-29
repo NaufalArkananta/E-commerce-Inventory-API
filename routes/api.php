@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\CategoryController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware(['auth:ap i'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
 
     Route::middleware('admin')->group(function () {
