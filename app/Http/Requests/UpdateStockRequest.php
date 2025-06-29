@@ -15,7 +15,7 @@ class UpdateStockRequest extends FormRequest
     {
         return [
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer',
+            'quantity' => 'required|integer|min:0',
         ];
     }
 
@@ -26,6 +26,7 @@ class UpdateStockRequest extends FormRequest
             'product_id.exists' => 'Produk tidak ditemukan.',
             'quantity.required' => 'Kuantitas harus diisi.',
             'quantity.integer' => 'Kuantitas harus berupa angka.',
+            'quantity.min' => 'Quantitas tidak boleh kurang dari 0.',
         ];
     }
 }
