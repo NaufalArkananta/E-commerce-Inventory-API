@@ -27,17 +27,36 @@ class ProductController extends Controller
     // 2. GET /products
     public function index()
     {
+        $products = Product::with('category')->get();
+        
+        if ($products->isEmpty()) {
+            return response()->json([
+                'status' => " 404 Not Found",
+                'message' => 'No products found',
+                'data' => []
+            ], 404);
+        }
+
         return response()->json([
             'status' => "200 OK",
             'message' => 'Product retrieved successfully',
-            'data' => Product::with('category')->get()
+            'data' => $products
         ], 200);
     }
 
     // 3. GET /products/{id}
     public function show($id)
     {
-        $product = Product::with('category')->findOrFail($id);
+        $product = Product::with('category')->find($id);
+        
+        if (!$product) {
+            return response()->json([
+                'status' => " 404 Not Found",
+                'message' => 'Product not found',
+                'data' => []
+            ], 404);
+        }
+
         return response()->json([
             'status' => " 200 OK",
             'message' => 'Product retrieved successfully',
@@ -48,7 +67,16 @@ class ProductController extends Controller
     // 4. PUT /products/{id}
     public function update(UpdateProductRequest $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json([
+                'status' => " 404 Not Found",
+                'message' => 'Product not found',
+                'data' => []
+            ], 404);
+        }
+
         $product->update($request->validated());
         
         return response()->json([
@@ -61,7 +89,16 @@ class ProductController extends Controller
     // 5. DELETE /products/{id}
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json([
+                'status' => " 404 Not Found",
+                'message' => 'Product not found',
+                'data' => []
+            ], 404);
+        }
+
         $product->delete();
 
         return response()->json([
@@ -84,17 +121,36 @@ class ProductController extends Controller
             $query->where('category_id', $request->category_id);
         }
 
+        $products = $query->get();
+
+        if ($products->isEmpty()) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No products found for the given filter.',
+                'data' => []
+            ], 404);
+        }
+
         return response()->json([
             'status' => " 200 OK",
             'message' => 'Product retrieved successfully',
-            'data' => $query->get()
+            'data' => $products
         ], 200);
     }
 
     // 9. POST /products/update-stock
     public function updateStock(UpdateStockRequest $request)
     {
-        $product = Product::findOrFail($request->product_id);
+        $product = Product::find($request->product_id);
+
+        if (!$product) {
+            return response()->json([
+                'status' => " 404 Not Found",
+                'message' => 'Product not found',
+                'data' => []
+            ], 404);
+        }
+
         $product->stock_quantity += $request->quantity;
         $product->save();
 
