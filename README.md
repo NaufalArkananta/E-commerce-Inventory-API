@@ -8,7 +8,7 @@ Sebuah RESTful API sederhana untuk manajemen produk, kategori, dan stok mengguna
 
 ### 1. Clone dari GitHub
 ```bash
-git clone https://github.com/username/inventory-api.git
+git clone https://github.com/NaufalArkananta/inventory-api.git
 cd inventory-api
 ```
 
@@ -158,4 +158,4 @@ Import file: `Inventory API.postman_collection.json` (disediakan di project)
 ---
 
 ## ✍️ Author
-Created with ❤️ by [Nama Kamu]
+Created with ❤️ by Naufal Arkananta
