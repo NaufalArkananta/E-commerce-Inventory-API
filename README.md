@@ -8,7 +8,7 @@ Sebuah RESTful API sederhana untuk manajemen produk, kategori, dan stok mengguna
 
 ### 1. Clone dari GitHub
 ```bash
-git clone https://github.com/NaufalArkananta/inventory-api.git
+git clone https://github.com/NaufalArkananta/E-commerce-Inventory-API
 cd inventory-api
 ```
 
