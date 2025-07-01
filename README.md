@@ -1,66 +1,161 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📦 Inventory API – Laravel 10
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sebuah RESTful API sederhana untuk manajemen produk, kategori, dan stok menggunakan Laravel 10 dan autentikasi JWT.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Instalasi & Menjalankan Proyek
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Clone dari GitHub
+```bash
+git clone https://github.com/username/inventory-api.git
+cd inventory-api
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2. Install Dependency
+```bash
+composer install
+```
 
-## Learning Laravel
+### 3. Copy & Konfigurasi `.env`
+```bash
+cp .env.example .env
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Edit `.env`:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```
+DB_DATABASE=inventory_api_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 4. Generate App Key
+```bash
+php artisan key:generate
+```
 
-## Laravel Sponsors
+### 5. Jalankan Migration dan Seeder
+```bash
+php artisan migrate:fresh --seed
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### 6. Jalankan Server
+```bash
+php artisan serve
+```
 
-### Premium Partners
+Akses API di:
+📍 `http://127.0.0.1:8000/api`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+---
 
-## Contributing
+## 🔐 Autentikasi (JWT)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Install JWT
+```bash
+composer require tymon/jwt-auth
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+php artisan jwt:secret
+```
 
-## Code of Conduct
+### Register (Opsional)
+`POST /api/register`
+```json
+{
+  "name": "Admin",
+  "email": "admin@mail.com",
+  "password": "password",
+  "role": "admin"
+}
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Login
+`POST /api/login`
+```json
+{
+  "email": "admin@mail.com",
+  "password": "password"
+}
+```
 
-## Security Vulnerabilities
+**Response:**
+```json
+{
+  "access_token": "....",
+  "token_type": "bearer"
+}
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+💡 Gunakan di header:
+```
+Authorization: Bearer <access_token>
+```
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📘 Endpoint Utama
+
+| Method | Endpoint                     | Deskripsi                      |
+|--------|------------------------------|--------------------------------|
+| POST   | /api/products                | Tambah produk                  |
+| GET    | /api/products                | Lihat semua produk             |
+| GET    | /api/products/{id}           | Lihat detail produk            |
+| PUT    | /api/products/{id}           | Update produk                  |
+| DELETE | /api/products/{id}           | Hapus produk                   |
+| GET    | /api/products/search         | Cari produk berdasarkan nama/kategori |
+| POST   | /api/products/update-stock   | Tambah/kurangi stok produk     |
+| GET    | /api/inventory/value         | Total nilai inventaris         |
+| POST   | /api/categories              | Tambah kategori                |
+| GET    | /api/categories              | Lihat semua kategori           |
+
+---
+
+## 🔁 Format Response Standar
+
+### ✅ Sukses
+```json
+{
+  "status": 200,
+  "message": "Product retrieved successfully",
+  "data": {...}
+}
+```
+
+### ❌ Validasi Gagal
+```json
+{
+  "status": false,
+  "message": "Validation error",
+  "errors": {
+    "name": ["The name field is required."]
+  }
+}
+```
+
+### ❌ Tidak Ditemukan
+```json
+{
+  "status": 404,
+  "message": "Product not found",
+  "data": []
+}
+```
+
+---
+
+## 📦 Seeder Otomatis
+Seeder akan membuat:
+- 2 user (`admin@mail.com`, `user@mail.com`) – password: `password`
+- 5 kategori acak
+- 20 produk acak
+
+---
+
+## 🧪 Postman Collection
+Import file: `Inventory API.postman_collection.json` (disediakan di project)
+
+---
+
+## ✍️ Author
+Created with ❤️ by [Nama Kamu]
