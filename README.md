@@ -153,7 +153,7 @@ Seeder akan membuat:
 ---
 
 ## 🧪 Postman Collection
-Import file: `Inventory API.postman_collection.json` (disediakan di project)
+Import file: `Inventory.postman_collection.json` (disediakan di project)
 
 ---
 
