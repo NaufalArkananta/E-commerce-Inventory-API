@@ -2,6 +2,8 @@
 
 Sebuah RESTful API sederhana untuk manajemen produk, kategori, dan stok menggunakan Laravel 10 dan autentikasi JWT.
 
+Video : https://drive.google.com/file/d/1sFBWDy_LhDqZU-hR4bgcDtxQteyc3Bxo/view?usp=sharing
+
 ---
 
 ## 🚀 Instalasi & Menjalankan Proyek
