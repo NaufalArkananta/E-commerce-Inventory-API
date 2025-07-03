@@ -151,7 +151,7 @@ class ProductController extends Controller
             ], 404);
         }
 
-        $product->stock_quantity += $request->quantity;
+        $product->stock_quantity -= $request->quantity;
         $product->save();
 
         return response()->json([
